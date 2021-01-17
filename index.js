@@ -1,17 +1,19 @@
-require('./db');
-
 const express = require('express');
+const mongoose = require('mongoose');
 const app = express();
-
-const routes = require('./routes');
-const { readAuth } = require('./middlewares');
-
 app.use(express.json());
-app.use(readAuth);
 
-app.use('/', routes.auth);
-app.use('/event', routes.event);
+const URL = 'mongodb://localhost:27017/myServer';
 
-app.listen(5000, '127.0.0.1', () => {
-  console.log('backend ready');
-});
+const PORT = 5001;
+
+mongoose.connect(
+  URL,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  () => {
+    console.log('Database connected');
+    app.listen(PORT, () =>
+      console.log(`Server running on http://localhost:${PORT}`)
+    );
+  }
+);
